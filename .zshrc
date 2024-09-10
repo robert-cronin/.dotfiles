@@ -105,7 +105,9 @@ source $ZSH/oh-my-zsh.sh
 
 # Custom aliases
 alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+alias ls='ls -la'
 
+# Custom functions
 dot(){
   if [[ "$#" -eq 0 ]]; then
     (cd /
