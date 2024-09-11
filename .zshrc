@@ -1,4 +1,4 @@
-# If you come from bash you might have to change your $PATH.
+
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 # Path to your Oh My Zsh installation.
@@ -123,6 +123,9 @@ dot(){
 
 
 alias dots='dot status'
+alias dotc='dot commit'
+alias dotl='dot log'
+alias dotau='dot add -u'
 
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 
