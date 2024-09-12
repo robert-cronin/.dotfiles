@@ -104,12 +104,13 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Conveniences for dotfiles
-alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-alias dots='dot status'
-alias dotc='dot commit'
-alias dotl='dot log'
-alias dotau='dot add -u'
-
+export DOT_FLAGS="--git-dir=$HOME/.dotfiles --work-tree=$HOME"
+alias dotfiles="git $DOT_FLAGS"
+alias dots="dot status"
+alias dotc="dot commit"
+alias dotl="dot log"
+alias dotau="dot add -u"
+alias dotlg="lazygit $DOT_FLAGS"
 dot(){
   if [[ "$#" -eq 0 ]]; then
     (cd /
@@ -133,5 +134,4 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 # Nodejs
 export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
