@@ -128,8 +128,11 @@ dot(){
 
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 
-# Git config
+# Git
 alias cdgh='cd $HOME/Documents/github'
+
+# Helpful aliases
+alias ll='ls -alF'
 
 # Path modifiers
 export PATH="$HOME/.cargo/bin:$PATH"
