@@ -103,11 +103,13 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Custom aliases
+# Conveniences for dotfiles
 alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-alias ls='ls -la'
+alias dots='dot status'
+alias dotc='dot commit'
+alias dotl='dot log'
+alias dotau='dot add -u'
 
-# Custom functions
 dot(){
   if [[ "$#" -eq 0 ]]; then
     (cd /
@@ -121,13 +123,15 @@ dot(){
   fi
 }
 
-
-alias dots='dot status'
-alias dotc='dot commit'
-alias dotl='dot log'
-alias dotau='dot add -u'
-
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 
+# Git config
+alias cdgh='cd $HOME/Documents/github'
+
+# Path modifiers
 export PATH="$HOME/.cargo/bin:$PATH"
 
+# Nodejs
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

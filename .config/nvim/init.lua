@@ -606,15 +606,21 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
+        gopls = {
+          analyses = {
+            unusedparams = true,
+          },
+          staticcheck = true,
+          gofumpt = true,
+        },
         -- pyright = {},
         -- rust_analyzer = {},
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
+        -- ... etc. see `:help lspconfig-all` for a list of all the pre-configured lsps
         --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
+        -- some languages (like typescript) have entire language plugins that can be useful:
         --    https://github.com/pmizio/typescript-tools.nvim
         --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
+        -- but for many setups, the lsp (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
 
@@ -623,30 +629,30 @@ require('lazy').setup({
           -- filetypes = { ...},
           -- capabilities = {},
           settings = {
-            Lua = {
+            lua = {
               completion = {
-                callSnippet = 'Replace',
+                callsnippet = 'replace',
               },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+              -- you can toggle below to ignore lua_ls's noisy `missing-fields` warnings
               -- diagnostics = { disable = { 'missing-fields' } },
             },
           },
         },
       }
 
-      -- Ensure the servers and tools above are installed
-      --  To check the current status of installed tools and/or manually install
+      -- ensure the servers and tools above are installed
+      --  to check the current status of installed tools and/or manually install
       --  other tools, you can run
-      --    :Mason
+      --    :mason
       --
-      --  You can press `g?` for help in this menu.
+      --  you can press `g?` for help in this menu.
       require('mason').setup()
 
-      -- You can add other tools here that you want Mason to install
-      -- for you, so that they are available from within Neovim.
+      -- you can add other tools here that you want mason to install
+      -- for you, so that they are available from within neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
+        'stylua', -- used to format lua code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -654,9 +660,9 @@ require('lazy').setup({
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
+            -- this handles overriding only values explicitly passed
+            -- by the server configuration above. useful when disabling
+            -- certain features of an lsp (for example, turning off formatting for ts_ls)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
           end,
@@ -665,10 +671,10 @@ require('lazy').setup({
     end,
   },
 
-  { -- Autoformat
+  { -- autoformat
     'stevearc/conform.nvim',
-    event = { 'BufWritePre' },
-    cmd = { 'ConformInfo' },
+    event = { 'bufwritepre' },
+    cmd = { 'conforminfo' },
     keys = {
       {
         '<leader>f',
@@ -676,14 +682,14 @@ require('lazy').setup({
           require('conform').format { async = true, lsp_format = 'fallback' }
         end,
         mode = '',
-        desc = '[F]ormat buffer',
+        desc = '[f]ormat buffer',
       },
     },
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
+        -- disable "format_on_save lsp_fallback" for languages that don't
+        -- have a well standardized coding style. you can add additional
         -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
         local lsp_format_opt
@@ -699,26 +705,26 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
+        -- conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
+        -- you can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
       },
     },
   },
 
-  { -- Autocompletion
+  { -- autocompletion
     'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
+    event = 'insertenter',
     dependencies = {
-      -- Snippet Engine & its associated nvim-cmp source
+      -- snippet engine & its associated nvim-cmp source
       {
-        'L3MON4D3/LuaSnip',
+        'l3mon4d3/luasnip',
         build = (function()
-          -- Build Step is needed for regex support in snippets.
-          -- This step is not supported in many windows environments.
-          -- Remove the below condition to re-enable on windows.
+          -- build step is needed for regex support in snippets.
+          -- this step is not supported in many windows environments.
+          -- remove the below condition to re-enable on windows.
           if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
             return
           end
@@ -726,7 +732,7 @@ require('lazy').setup({
         end)(),
         dependencies = {
           -- `friendly-snippets` contains a variety of premade snippets.
-          --    See the README about individual language/framework/plugin snippets:
+          --    see the readme about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
           -- {
           --   'rafamadriz/friendly-snippets',
@@ -738,14 +744,14 @@ require('lazy').setup({
       },
       'saadparwaiz1/cmp_luasnip',
 
-      -- Adds other completion capabilities.
-      --  nvim-cmp does not ship with all sources by default. They are split
+      -- adds other completion capabilities.
+      --  nvim-cmp does not ship with all sources by default. they are split
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
     },
     config = function()
-      -- See `:help cmp`
+      -- see `:help cmp`
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
       luasnip.config.setup {}
@@ -758,62 +764,62 @@ require('lazy').setup({
         },
         completion = { completeopt = 'menu,menuone,noinsert' },
 
-        -- For an understanding of why these mappings were
+        -- for an understanding of why these mappings were
         -- chosen, you will need to read `:help ins-completion`
         --
-        -- No, but seriously. Please read `:help ins-completion`, it is really good!
+        -- no, but seriously. please read `:help ins-completion`, it is really good!
         mapping = cmp.mapping.preset.insert {
-          -- Select the [n]ext item
-          ['<C-n>'] = cmp.mapping.select_next_item(),
-          -- Select the [p]revious item
-          ['<C-p>'] = cmp.mapping.select_prev_item(),
+          -- select the [n]ext item
+          ['<c-n>'] = cmp.mapping.select_next_item(),
+          -- select the [p]revious item
+          ['<c-p>'] = cmp.mapping.select_prev_item(),
 
-          -- Scroll the documentation window [b]ack / [f]orward
-          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          -- scroll the documentation window [b]ack / [f]orward
+          ['<c-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<c-f>'] = cmp.mapping.scroll_docs(4),
 
-          -- Accept ([y]es) the completion.
-          --  This will auto-import if your LSP supports it.
-          --  This will expand snippets if the LSP sent a snippet.
-          ['<C-y>'] = cmp.mapping.confirm { select = true },
+          -- accept ([y]es) the completion.
+          --  this will auto-import if your lsp supports it.
+          --  this will expand snippets if the lsp sent a snippet.
+          ['<c-y>'] = cmp.mapping.confirm { select = true },
 
-          -- If you prefer more traditional completion keymaps,
+          -- if you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
-          --['<CR>'] = cmp.mapping.confirm { select = true },
-          --['<Tab>'] = cmp.mapping.select_next_item(),
-          --['<S-Tab>'] = cmp.mapping.select_prev_item(),
+          --['<cr>'] = cmp.mapping.confirm { select = true },
+          --['<tab>'] = cmp.mapping.select_next_item(),
+          --['<s-tab>'] = cmp.mapping.select_prev_item(),
 
-          -- Manually trigger a completion from nvim-cmp.
-          --  Generally you don't need this, because nvim-cmp will display
+          -- manually trigger a completion from nvim-cmp.
+          --  generally you don't need this, because nvim-cmp will display
           --  completions whenever it has completion options available.
-          ['<C-Space>'] = cmp.mapping.complete {},
+          ['<c-space>'] = cmp.mapping.complete {},
 
-          -- Think of <c-l> as moving to the right of your snippet expansion.
-          --  So if you have a snippet that's like:
+          -- think of <c-l> as moving to the right of your snippet expansion.
+          --  so if you have a snippet that's like:
           --  function $name($args)
           --    $body
           --  end
           --
           -- <c-l> will move you to the right of each of the expansion locations.
           -- <c-h> is similar, except moving you backwards.
-          ['<C-l>'] = cmp.mapping(function()
+          ['<c-l>'] = cmp.mapping(function()
             if luasnip.expand_or_locally_jumpable() then
               luasnip.expand_or_jump()
             end
           end, { 'i', 's' }),
-          ['<C-h>'] = cmp.mapping(function()
+          ['<c-h>'] = cmp.mapping(function()
             if luasnip.locally_jumpable(-1) then
               luasnip.jump(-1)
             end
           end, { 'i', 's' }),
 
-          -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
-          --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
+          -- for more advanced luasnip keymaps (e.g. selecting choice nodes, expansion) see:
+          --    https://github.com/l3mon4d3/luasnip?tab=readme-ov-file#keymaps
         },
         sources = {
           {
             name = 'lazydev',
-            -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
+            -- set group index to 0 to skip loading luals completions as lazydev recommends it
             group_index = 0,
           },
           { name = 'nvim_lsp' },
@@ -824,98 +830,98 @@ require('lazy').setup({
     end,
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
+  { -- you can easily change to a different colorscheme.
+    -- change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
     --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+    -- if you want to see what colorschemes are already installed, you can use `:telescope colorscheme`.
     'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
+    priority = 1000, -- make sure to load this before all the other start plugins.
     init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
+      -- load the colorscheme here.
+      -- like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       vim.cmd.colorscheme 'tokyonight-night'
 
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
+      -- you can configure highlights by doing something like:
+      vim.cmd.hi 'comment gui=none'
     end,
   },
 
-  -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  -- highlight todo, notes, etc in comments
+  { 'folke/todo-comments.nvim', event = 'vimenter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
-  { -- Collection of various small independent plugins/modules
+  { -- collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
-      -- Better Around/Inside textobjects
+      -- better around/inside textobjects
       --
-      -- Examples:
-      --  - va)  - [V]isually select [A]round [)]paren
-      --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
-      --  - ci'  - [C]hange [I]nside [']quote
+      -- examples:
+      --  - va)  - [v]isually select [a]round [)]paren
+      --  - yinq - [y]ank [i]nside [n]ext [q]uote
+      --  - ci'  - [c]hange [i]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
 
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
+      -- add/delete/replace surroundings (brackets, quotes, etc.)
       --
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
+      -- - saiw) - [s]urround [a]dd [i]nner [w]ord [)]paren
+      -- - sd'   - [s]urround [d]elete [']quotes
+      -- - sr)'  - [s]urround [r]eplace [)] [']
       require('mini.surround').setup()
 
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
+      -- simple and easy statusline.
+      --  you could remove this setup call if you don't like it,
       --  and try some other statusline plugin
       local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
+      -- set use_icons to true if you have a nerd font
       statusline.setup { use_icons = vim.g.have_nerd_font }
 
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
+      -- you can configure sections in the statusline by overriding their
+      -- default behavior. for example, here we set the section for
+      -- cursor location to line:column
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function()
         return '%2l:%-2v'
       end
 
       -- ... and there is more!
-      --  Check out: https://github.com/echasnovski/mini.nvim
+      --  check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  { -- Highlight, edit, and navigate code
+  { -- highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+    build = ':tsupdate',
+    main = 'nvim-treesitter.configs', -- sets main module to use for opts
+    -- [[ configure treesitter ]] see `:help nvim-treesitter`
     opts = {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
+      -- autoinstall languages that are not installed
       auto_install = true,
       highlight = {
         enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
+        -- some languages depend on vim's regex highlighting system (such as ruby) for indent rules.
+        --  if you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
     },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
+    -- there are additional nvim-treesitter modules that you can use to interact
+    -- with nvim-treesitter. you should go explore a few and see what interests you:
     --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+    --    - incremental selection: included, see `:help nvim-treesitter-incremental-selection-mod`
+    --    - show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
+    --    - treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
 
-  -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
-  -- init.lua. If you want these files, they are in the repository, so you can just download them and
+  -- the following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
+  -- init.lua. if you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
 
-  -- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
+  -- note: next step on your neovim journey: add/configure additional plugins for kickstart
   --
-  --  Here are some example plugins that I've included in the Kickstart repository.
-  --  Uncomment any of the lines below to enable them (you will need to restart nvim).
+  --  here are some example plugins that i've included in the kickstart repository.
+  --  uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
@@ -924,16 +930,16 @@ require('lazy').setup({
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
-  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    This is the easiest way to modularize your config.
+  -- note: the import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
+  --    this is the easiest way to modularize your config.
   --
-  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+  --  uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
+  --    for additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
+  { import = 'custom.plugins' },
 }, {
   ui = {
-    -- If you are using a Nerd Font: set icons to an empty table which will use the
-    -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
+    -- if you are using a nerd font: set icons to an empty table which will use the
+    -- default lazy.nvim defined nerd font icons, otherwise define a unicode icons table
     icons = vim.g.have_nerd_font and {} or {
       cmd = '⌘',
       config = '🛠',
@@ -952,10 +958,13 @@ require('lazy').setup({
   },
 })
 
--- The line beneath this is called `modeline`. See `:help modeline`
+-- the line beneath this is called `modeline`. see `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 --
 
 -- custom stuff on top of kickstart
-vim.api.nvim_set_keymap('n', ';', ':', { noremap = true })
-vim.api.nvim_set_keymap('', '<Cap>', '<Esc>', { noremap = true })
+-- remap ; to be :
+vim.keymap.set({ 'n', 'v' }, ';', ':', {})
+
+-- auto-formatting on save
+vim.cmd [[autocmd bufwritepre * lua vim.lsp.buf.format()]]
