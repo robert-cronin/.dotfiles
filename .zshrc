@@ -111,6 +111,8 @@ alias dotc="dot commit"
 alias dotl="dot log"
 alias dotau="dot add -u"
 alias dotlg="lazygit $DOT_FLAGS"
+alias dotp="dot push"
+
 dot(){
   if [[ "$#" -eq 0 ]]; then
     (cd /
@@ -135,3 +137,4 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # Nodejs
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
