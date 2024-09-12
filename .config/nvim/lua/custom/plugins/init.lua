@@ -4,6 +4,10 @@
 -- See the kickstart.nvim README for more information
 return {
   {
+    'github/copilot.vim',
+    branch = 'release'
+  },
+  {
     'neoclide/coc.nvim',
     branch = 'release',
     build = 'yarn install --frozen-lockfile',
