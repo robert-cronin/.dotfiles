@@ -6,5 +6,5 @@ alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 ```
 Then just clone it down:
 ```
-git clone https://github.com/robert-cronin/.dotfiles
+git clone --bare https://github.com/robert-cronin/.dotfiles $HOME/.dotfiles
 ```
