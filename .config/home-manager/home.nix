@@ -1,10 +1,34 @@
 { config, pkgs, ... }:
 
+let
+  unstable = import <nixos-unstable> { };
+in
 {
+
+  programs.neovim = {
+    package = unstable.neovim-unwrapped;
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+  };
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "rob";
   home.homeDirectory = "/home/rob";
+  
+  # Allow unfree
+  nixpkgs.config.allowUnfree = true;
+
+  programs.vscode = {
+  enable = true;
+  extensions = with pkgs.vscode-extensions; [
+    dracula-theme.theme-dracula
+    vscodevim.vim
+    yzhang.markdown-all-in-one
+  ];
+};
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -21,10 +45,18 @@
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
-    neovim
     gcc
     git
     nerdfonts
+    gh
+    ripgrep
+    fzf
+    tmux
+    zsh
+    httpie
+    unzip
+    jq
+    lazygit
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the

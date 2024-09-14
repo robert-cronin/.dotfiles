@@ -1,0 +1,30 @@
+# Check if the script received the correct number of arguments
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <repo_path> <output_file>"
+    exit 1
+fi
+
+REPO_PATH=$1
+OUTPUT_FILE=$2
+
+# Change to the repository directory
+cd "$REPO_PATH" || {
+    echo "Repository path not found"
+    exit 1
+}
+
+# Ensure the output file is empty
+true >"$OUTPUT_FILE"
+
+# Use git ls-files to get all tracked and not ignored files
+git ls-files | while IFS= read -r file; do
+    # Print the relative path of the file
+    echo "\`\`\`repo/$file" >>"$OUTPUT_FILE"
+    # Print the file content
+    cat "$file" >>"$OUTPUT_FILE"
+    # Add a new line to separate files
+    echo "" >>"$OUTPUT_FILE"
+    echo "\`\`\`" >>"$OUTPUT_FILE"
+done
+
+echo "All tracked and not ignored files in the repository have been concatenated into $OUTPUT_FILE"

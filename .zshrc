@@ -70,7 +70,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -133,6 +133,8 @@ alias cdgh='cd $HOME/Documents/github'
 
 # Helpful aliases
 alias ll='ls -alF'
+alias ta='tmux attach'
+alias hms='home-manager switch'
 
 # Path modifiers
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -141,3 +143,9 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
+# Source scripts directory
+export PATH="$HOME/scripts:$PATH"
+
+# Set tab as the completion key
+bindkey '^I'   complete-word       # tab          | complete
+bindkey '^[[Z' autosuggest-accept  # shift + tab  | autosuggest

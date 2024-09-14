@@ -438,18 +438,6 @@ require('lazy').setup({
   },
 
   -- LSP Plugins
-  {
-    -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
-    -- used for completion, annotations and signatures of Neovim apis
-    'folke/lazydev.nvim',
-    ft = 'lua',
-    opts = {
-      library = {
-        -- Load luvit types when the `vim.uv` word is found
-        { path = 'luvit-meta/library', words = { 'vim%.uv' } },
-      },
-    },
-  },
   { 'Bilal2453/luvit-meta',     lazy = true },
   {
     -- Main LSP Configuration
@@ -621,7 +609,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- but for many setups, the lsp (`ts_ls`) will work just fine
-        -- ts_ls = {},
+        ts_ls = {},
         --
 
         lua_ls = {
@@ -637,6 +625,10 @@ require('lazy').setup({
               -- diagnostics = { disable = { 'missing-fields' } },
             },
           },
+        },
+        
+        bashls = {
+          filetypes = { 'sh', 'zsh' },
         },
       }
 
@@ -674,7 +666,7 @@ require('lazy').setup({
   { -- autoformat
     'stevearc/conform.nvim',
     event = { 'bufwritepre' },
-    cmd = { 'conforminfo' },
+    cmd = { 'ConformInfo' },
     keys = {
       {
         '<leader>f',
@@ -713,6 +705,16 @@ require('lazy').setup({
       },
     },
   },
+
+
+
+{
+  'numToStr/Comment.nvim',
+  opts = {},
+  config = function()
+    require('Comment').setup()
+  end,
+},
 
   { -- autocompletion
     'hrsh7th/nvim-cmp',
@@ -890,11 +892,23 @@ require('lazy').setup({
   },
   { -- highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
-    build = ':tsupdate',
+    build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- sets main module to use for opts
     -- [[ configure treesitter ]] see `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc' 
+      },
       -- autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -936,6 +950,93 @@ require('lazy').setup({
   --  uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    for additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   { import = 'custom.plugins' },
+  {
+    "leoluz/nvim-dap-go",
+    dependencies = {
+      "mfussenegger/nvim-dap",
+    },
+    config = function()
+      require("dap-go").setup({
+        -- Your custom configuration goes here
+        dap_configurations = {
+          {
+            type = "go",
+            name = "Attach remote",
+            mode = "remote",
+            request = "attach",
+          },
+        },
+        delve = {
+          path = "dlv",
+          initialize_timeout_sec = 20,
+          port = "${port}",
+          args = {},
+          build_flags = "",
+          detached = true,
+          cwd = nil,
+        },
+        tests = {
+          verbose = false,
+        },
+      })
+    end,
+    -- Optional: Specify events to load the plugin lazily
+    -- event = "BufReadPre",
+  },
+  {
+    'nvim-tree/nvim-tree.lua',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    view = { side = 'right'},  
+    config = function()
+        require('nvim-tree').setup()
+        vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { desc = 'Toggle File Explorer' })
+      end,
+    },
+  {
+  'nvim-tree/nvim-tree.lua',
+  dependencies = { 'nvim-tree/nvim-web-devicons' },
+  config = function()
+    require('nvim-tree').setup()
+    vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { desc = 'Toggle File Explorer' })
+  end,
+},
+  {
+    "goolord/alpha-nvim",
+    event = "VimEnter",
+    config = function()
+      local alpha = require("alpha")
+      local dashboard = require("alpha.themes.dashboard")
+
+      -- Set up your custom ASCII art as the header
+      dashboard.section.header.val = {
+        [[$$\   $$\                    $$\    $$\ $$\                         $$$$$$$\ $$$$$$$$\ $$\      $$\ ]],
+        [[$$$\  $$ |                   $$ |   $$ |\__|                        $$  __$$\\__$$  __|$$ | $\  $$ |]],
+        [[$$$$\ $$ | $$$$$$\   $$$$$$\ $$ |   $$ |$$\ $$$$$$\$$$$\            $$ |  $$ |  $$ |   $$ |$$$\ $$ |]],
+        [[$$ $$\$$ |$$  __$$\ $$  __$$\\$$\  $$  |$$ |$$  _$$  _$$\           $$$$$$$\ |  $$ |   $$ $$ $$\$$ |]],
+        [[$$ \$$$$ |$$$$$$$$ |$$ /  $$ |\$$\$$  / $$ |$$ / $$ / $$ |          $$  __$$\   $$ |   $$$$  _$$$$ |]],
+        [[$$ |\$$$ |$$   ____|$$ |  $$ | \$$$  /  $$ |$$ | $$ | $$ |          $$ |  $$ |  $$ |   $$$  / \$$$ |]],
+        [[$$ | \$$ |\$$$$$$$\ \$$$$$$  |  \$  /   $$ |$$ | $$ | $$ |$$\       $$$$$$$  |  $$ |   $$  /   \$$ |]],
+        [[\__|  \__| \_______| \______/    \_/    \__|\__| \__| \__|$  |      \_______/   \__|   \__/     \__|]],
+        [[                                                          \_/]],
+      }
+
+      -- Set up buttons with icons for various shortcuts
+      dashboard.section.buttons.val = {
+        dashboard.button("f", "  Find file", ":Telescope find_files<CR>"),
+        dashboard.button("e", "  New file", ":ene <BAR> startinsert<CR>"),
+        dashboard.button("p", "  Find project", ":Telescope projects<CR>"),
+        dashboard.button("r", "  Recently used files", ":Telescope oldfiles<CR>"),
+        dashboard.button("t", "  Find text", ":Telescope live_grep<CR>"),
+        dashboard.button("q", "  Quit Neovim", ":qa<CR>"),
+      }
+
+      -- Optional footer
+      dashboard.section.footer.val = "Some people can read War and Peace and come away thinking it's a simple adventure story. Others can read the ingredients on a chewing gum wrapper and unlock the secrets of the universe"
+
+      -- Apply the dashboard setup
+      alpha.setup(dashboard.opts)
+    end,
+  },
 }, {
   ui = {
     -- if you are using a nerd font: set icons to an empty table which will use the
@@ -971,3 +1072,4 @@ vim.cmd [[autocmd bufwritepre * lua vim.lsp.buf.format()]]
 
 -- :qq to replace :q!
 vim.keymap.set('c', 'qq', 'q!<CR>', { noremap = true })
+

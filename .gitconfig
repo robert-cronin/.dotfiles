@@ -1,3 +1,5 @@
 [user]
 	email = robert@robertcronin.com
 	name = Robert Cronin
+[core]
+	editor = nvim
