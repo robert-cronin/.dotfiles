@@ -937,12 +937,12 @@ require('lazy').setup({
   --  here are some example plugins that i've included in the kickstart repository.
   --  uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- note: the import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    this is the easiest way to modularize your config.
@@ -953,6 +953,23 @@ require('lazy').setup({
   {
     "mfussenegger/nvim-dap",
   },
+  {
+  "christoomey/vim-tmux-navigator",
+  cmd = {
+    "TmuxNavigateLeft",
+    "TmuxNavigateDown",
+    "TmuxNavigateUp",
+    "TmuxNavigateRight",
+    "TmuxNavigatePrevious",
+  },
+  keys = {
+    { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
+    { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
+    { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
+    { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
+    { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+  },
+},
   {
     "leoluz/nvim-dap-go",
     dependencies = {
@@ -1014,20 +1031,15 @@ require('lazy').setup({
   {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    view = { side = 'right'},  
     config = function()
-        require('nvim-tree').setup()
-        vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { desc = 'Toggle File Explorer' })
-      end,
-    },
-  {
-  'nvim-tree/nvim-tree.lua',
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
-  config = function()
-    require('nvim-tree').setup()
-    vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { desc = 'Toggle File Explorer' })
-  end,
-},
+      require('nvim-tree').setup({
+        view = {
+          side = 'right',
+        }
+      })
+      vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { desc = 'Toggle File Explorer' })
+    end,
+  },
   {
     "goolord/alpha-nvim",
     event = "VimEnter",
@@ -1101,3 +1113,9 @@ vim.cmd [[autocmd bufwritepre * lua vim.lsp.buf.format()]]
 -- :qq to replace :q!
 vim.keymap.set('c', 'qq', 'q!<CR>', { noremap = true })
 
+-- Switch around r and Ctl-r
+vim.keymap.set('n', 'r', '<C-r>', { noremap = true })
+vim.keymap.set('n', '<C-r>', 'r', { noremap = true })
+
+-- Setup term.lua
+require('custom.term')
