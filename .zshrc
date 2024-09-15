@@ -135,6 +135,7 @@ alias cdgh='cd $HOME/Documents/github'
 alias ll='ls -alF'
 alias ta='tmux attach'
 alias hms='home-manager switch'
+alias cdgo='cd ${GOPATH:-$HOME/go}/src'
 
 # Path modifiers
 export PATH="$HOME/.cargo/bin:$PATH"
