@@ -318,7 +318,7 @@ require('lazy').setup({
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
-        { '<leader>w', group = '[W]orkspace' },
+        { '<leader>w', group = '[W]indows' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
@@ -521,7 +521,7 @@ require('lazy').setup({
 
           -- Fuzzy find all the symbols in your current workspace.
           --  Similar to document symbols, except searches over your entire project.
-          map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+          map('<leader>cs', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
@@ -706,8 +706,16 @@ require('lazy').setup({
     },
   },
 
-
-
+  
+{
+  'stevearc/oil.nvim',
+  ---@module 'oil'
+  ---@type oil.SetupOpts
+  opts = {},
+  -- Optional dependencies
+  dependencies = { { "echasnovski/mini.icons", opts = {} } },
+  -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
+},
 {
   'numToStr/Comment.nvim',
   opts = {},
@@ -1028,18 +1036,18 @@ require('lazy').setup({
     -- Optional: Specify events to load the plugin lazily
     -- event = "BufReadPre",
   },
-  {
-    'nvim-tree/nvim-tree.lua',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      require('nvim-tree').setup({
-        view = {
-          side = 'right',
-        }
-      })
-      vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { desc = 'Toggle File Explorer' })
-    end,
-  },
+  -- {
+  --   'nvim-tree/nvim-tree.lua',
+  --   dependencies = { 'nvim-tree/nvim-web-devicons' },
+  --   config = function()
+  --     require('nvim-tree').setup({
+  --       view = {
+  --         side = 'right',
+  --       }
+  --     })
+  --     vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { desc = 'Toggle File Explorer' })
+  --   end,
+  -- },
   {
     "goolord/alpha-nvim",
     event = "VimEnter",
@@ -1099,9 +1107,6 @@ require('lazy').setup({
   },
 })
 
--- the line beneath this is called `modeline`. see `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
---
 
 -- custom stuff on top of kickstart
 -- remap ; to be :
@@ -1111,11 +1116,29 @@ vim.keymap.set({ 'n', 'v' }, ';', ':', {})
 vim.cmd [[autocmd bufwritepre * lua vim.lsp.buf.format()]]
 
 -- :qq to replace :q!
-vim.keymap.set('c', 'qq', 'q!<CR>', { noremap = true })
+-- vim.keymap.set('c', 'qq', 'q!<CR>', { noremap = true })
+-- vim.api.nvim_create_user_command('qq', 'q!', { })
+vim.cmd('cabbrev qq q!')
+
 
 -- Switch around r and Ctl-r
-vim.keymap.set('n', 'r', '<C-r>', { noremap = true })
-vim.keymap.set('n', '<C-r>', 'r', { noremap = true })
+vim.keymap.set('n', 'r', '<C-r>', { noremap = true, desc = 'Redo' })
+vim.keymap.set('n', '<C-r>', 'r', { noremap = true, desc = 'Replace' })
 
 -- Setup term.lua
 require('custom.term')
+
+-- Add remaps for windows
+require('keymaps.windows')
+
+-- Keybindings for oil.nvim
+vim.keymap.set('n', '<leader>o', ':Oil<CR>', { desc = 'Open Oil' })
+
+-- Remap leader w to the ctl-w window commands
+vim.keymap.set('n', '<leader>w', '<C-w>', { noremap = false, desc = 'Window' })
+
+-- Set the defaul yank register to the system clipboard
+vim.opt.clipboard = 'unnamedplus'
+
+-- the line beneath this is called `modeline`. see `:help modeline`
+-- vim: ts=2 sts=2 sw=2 et

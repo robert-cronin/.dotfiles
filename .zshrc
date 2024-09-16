@@ -150,3 +150,6 @@ export PATH="$HOME/scripts:$PATH"
 # Set tab as the completion key
 bindkey '^I'   complete-word       # tab          | complete
 bindkey '^[[Z' autosuggest-accept  # shift + tab  | autosuggest
+
+# Set the location of the NixOS configuration file
+export NIX_PATH="nixos-config=$HOME/.config/home-manager/configuration.nix"

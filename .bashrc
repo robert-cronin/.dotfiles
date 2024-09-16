@@ -1,5 +1,9 @@
 # .bashrc
 
+# Set the location of the NixOS configuration file
+export NIX_PATH="nixos-config=$HOME/.config/nixos/configuration.nix"
+
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
     . /etc/bashrc
