@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 # Path to your Oh My Zsh installation.
@@ -8,6 +15,12 @@ export ZSH="$HOME/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="robbyrussell"
+
+# Mise
+if [[ ! -f $HOME/.local/bin/mise ]]; then
+  curl https://mise.run | sh
+fi
+eval "$($HOME/.local/bin/mise activate zsh)"
 
 # Setup alacritty theme
 if [[ ! -d ~/.config/alacritty/themes ]]; then
@@ -86,6 +99,12 @@ if [[ ! -d $ZSH/custom/plugins/zsh-syntax-highlighting ]]; then
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 fi
 
+# powerlevel10k
+if [[ ! -d $ZSH/custom/themes/powerlevel10k ]]; then
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+fi
+source ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k/powerlevel10k.zsh-theme
+
 # oh-my-zsh
 source $ZSH/oh-my-zsh.sh
 
@@ -149,7 +168,6 @@ alias cdgh='cd $HOME/Documents/github'
 
 # Helpful aliases
 alias ll='ls -alF'
-alias ta='tmux attach'
 alias hms='home-manager switch'
 alias cdgo='cd ${GOPATH:-$HOME/go}/src'
 
@@ -173,9 +191,12 @@ export NIX_PATH="nixos-config=$HOME/.config/home-manager/configuration.nix"
 # Zoxide init
 eval "$(zoxide init zsh)"
 
-# Mise
-# ensure binary is installed
-if [[ ! -f $HOME/.local/bin/mise ]]; then
-  curl https://mise.run | sh
-fi
-eval "$($HOME/.local/bin/mise activate zsh)"
+# Set the default editor
+export EDITOR=nvim
+
+# Helpful aliases for tmux
+alias t='tmux'
+alias ta='tmux attach'
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
