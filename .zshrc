@@ -1,4 +1,3 @@
-
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 # Path to your Oh My Zsh installation.
@@ -9,6 +8,12 @@ export ZSH="$HOME/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="robbyrussell"
+
+# Setup alacritty theme
+if [[ ! -d ~/.config/alacritty/themes ]]; then
+  mkdir -p ~/.config/alacritty/themes
+  git clone https://github.com/alacritty/alacritty-theme ~/.config/alacritty/themes
+fi
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -72,6 +77,16 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
+# Auto install missing plugins
+if [[ ! -d $ZSH/custom/plugins/zsh-autosuggestions ]]; then
+  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+fi
+
+if [[ ! -d $ZSH/custom/plugins/zsh-syntax-highlighting ]]; then
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+fi
+
+# oh-my-zsh
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -112,6 +127,7 @@ alias dotl="dot log"
 alias dotau="dot add -u"
 alias dotlg="lazygit $DOT_FLAGS"
 alias dotp="dot push"
+alias dotls="dot ls-files"
 
 dot(){
   if [[ "$#" -eq 0 ]]; then
@@ -153,3 +169,13 @@ bindkey '^[[Z' autosuggest-accept  # shift + tab  | autosuggest
 
 # Set the location of the NixOS configuration file
 export NIX_PATH="nixos-config=$HOME/.config/home-manager/configuration.nix"
+
+# Zoxide init
+eval "$(zoxide init zsh)"
+
+# Mise
+# ensure binary is installed
+if [[ ! -f $HOME/.local/bin/mise ]]; then
+  curl https://mise.run | sh
+fi
+eval "$($HOME/.local/bin/mise activate zsh)"

@@ -1,5 +1,20 @@
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 [user]
+	name = robert-cronin
 	email = robert@robertcronin.com
-	name = Robert Cronin
 [core]
 	editor = nvim
+[commit]
+	gpgSign = false
+[gpg]
+	program = gpg2
+[diff]
+	tool = nvimdiff
+[difftool "nvimdiff"]
+	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
+[difftool]
+	prompt = false

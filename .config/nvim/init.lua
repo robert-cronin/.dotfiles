@@ -354,7 +354,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
+      -- { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -626,7 +626,7 @@ require('lazy').setup({
             },
           },
         },
-        
+
         bashls = {
           filetypes = { 'sh', 'zsh' },
         },
@@ -706,23 +706,27 @@ require('lazy').setup({
     },
   },
 
-  
-{
-  'stevearc/oil.nvim',
-  ---@module 'oil'
-  ---@type oil.SetupOpts
-  opts = {},
-  -- Optional dependencies
-  dependencies = { { "echasnovski/mini.icons", opts = {} } },
-  -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
-},
-{
-  'numToStr/Comment.nvim',
-  opts = {},
-  config = function()
-    require('Comment').setup()
-  end,
-},
+  {
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {
+      view_options = {
+        -- Show files and directories that start with "."
+        show_hidden = true,
+      },
+    },
+    -- Optional dependencies
+    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
+    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
+  },
+  {
+    'numToStr/Comment.nvim',
+    opts = {},
+    config = function()
+      require('Comment').setup()
+    end,
+  },
 
   { -- autocompletion
     'hrsh7th/nvim-cmp',
@@ -839,24 +843,25 @@ require('lazy').setup({
       }
     end,
   },
+  { 'ellisonleao/gruvbox.nvim', priority = 1000,    config = true },
 
-  { -- you can easily change to a different colorscheme.
-    -- change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- if you want to see what colorschemes are already installed, you can use `:telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- make sure to load this before all the other start plugins.
-    init = function()
-      -- load the colorscheme here.
-      -- like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
-
-      -- you can configure highlights by doing something like:
-      vim.cmd.hi 'comment gui=none'
-    end,
-  },
+  -- { -- you can easily change to a different colorscheme.
+  --   -- change the name of the colorscheme plugin below, and then
+  --   -- change the command in the config to whatever the name of that colorscheme is.
+  --   --
+  --   -- if you want to see what colorschemes are already installed, you can use `:telescope colorscheme`.
+  --   'folke/tokyonight.nvim',
+  --   priority = 1000, -- make sure to load this before all the other start plugins.
+  --   init = function()
+  --     -- load the colorscheme here.
+  --     -- like many other themes, this one has different styles, and you could load
+  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+  --     vim.cmd.colorscheme 'tokyonight-night'
+  --
+  --     -- you can configure highlights by doing something like:
+  --     vim.cmd.hi 'comment gui=none'
+  --   end,
+  -- },
 
   -- highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'vimenter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
@@ -904,7 +909,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- sets main module to use for opts
     -- [[ configure treesitter ]] see `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 
+      ensure_installed = {
         'bash',
         'c',
         'diff',
@@ -915,7 +920,7 @@ require('lazy').setup({
         'markdown_inline',
         'query',
         'vim',
-        'vimdoc' 
+        'vimdoc',
       },
       -- autoinstall languages that are not installed
       auto_install = true,
@@ -959,101 +964,119 @@ require('lazy').setup({
   --    for additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   { import = 'custom.plugins' },
   {
-    "mfussenegger/nvim-dap",
+    'mfussenegger/nvim-dap',
   },
   {
-  "christoomey/vim-tmux-navigator",
-  cmd = {
-    "TmuxNavigateLeft",
-    "TmuxNavigateDown",
-    "TmuxNavigateUp",
-    "TmuxNavigateRight",
-    "TmuxNavigatePrevious",
+    'christoomey/vim-tmux-navigator',
+    cmd = {
+      'TmuxNavigateLeft',
+      'TmuxNavigateDown',
+      'TmuxNavigateUp',
+      'TmuxNavigateRight',
+      'TmuxNavigatePrevious',
+    },
+    keys = {
+      { '<c-h>',  '<cmd><C-U>TmuxNavigateLeft<cr>' },
+      { '<c-j>',  '<cmd><C-U>TmuxNavigateDown<cr>' },
+      { '<c-k>',  '<cmd><C-U>TmuxNavigateUp<cr>' },
+      { '<c-l>',  '<cmd><C-U>TmuxNavigateRight<cr>' },
+      { '<c-\\>', '<cmd><C-U>TmuxNavigatePrevious<cr>' },
+    },
   },
-  keys = {
-    { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
-    { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
-    { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
-    { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
-    { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
-  },
-},
   {
-    "leoluz/nvim-dap-go",
+    'leoluz/nvim-dap-go',
     dependencies = {
-      "mfussenegger/nvim-dap",
+      'mfussenegger/nvim-dap',
     },
     config = function()
-
-      vim.keymap.set('n', '<F5>', function() require('dap').continue() end)
-      vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
-      vim.keymap.set('n', '<F11>', function() require('dap').step_into() end)
-      vim.keymap.set('n', '<F12>', function() require('dap').step_out() end)
-      vim.keymap.set('n', '<Leader>b', function() require('dap').toggle_breakpoint() end)
-      vim.keymap.set('n', '<Leader>B', function() require('dap').set_breakpoint() end)
-      vim.keymap.set('n', '<Leader>lp', function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end)
-      vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end)
-      vim.keymap.set('n', '<Leader>dl', function() require('dap').run_last() end)
-      vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
+      vim.keymap.set('n', '<F5>', function()
+        require('dap').continue()
+      end)
+      vim.keymap.set('n', '<F10>', function()
+        require('dap').step_over()
+      end)
+      vim.keymap.set('n', '<F11>', function()
+        require('dap').step_into()
+      end)
+      vim.keymap.set('n', '<F12>', function()
+        require('dap').step_out()
+      end)
+      vim.keymap.set('n', '<Leader>b', function()
+        require('dap').toggle_breakpoint()
+      end)
+      vim.keymap.set('n', '<Leader>B', function()
+        require('dap').set_breakpoint()
+      end)
+      vim.keymap.set('n', '<Leader>lp', function()
+        require('dap').set_breakpoint(nil, nil, vim.fn.input 'Log point message: ')
+      end)
+      vim.keymap.set('n', '<Leader>dr', function()
+        require('dap').repl.open()
+      end)
+      vim.keymap.set('n', '<Leader>dl', function()
+        require('dap').run_last()
+      end)
+      vim.keymap.set({ 'n', 'v' }, '<Leader>dh', function()
         require('dap.ui.widgets').hover()
       end)
-      vim.keymap.set({'n', 'v'}, '<Leader>dp', function()
+      vim.keymap.set({ 'n', 'v' }, '<Leader>dp', function()
         require('dap.ui.widgets').preview()
       end)
       vim.keymap.set('n', '<Leader>df', function()
-        local widgets = require('dap.ui.widgets')
+        local widgets = require 'dap.ui.widgets'
         widgets.centered_float(widgets.frames)
       end)
       vim.keymap.set('n', '<Leader>ds', function()
-        local widgets = require('dap.ui.widgets')
+        local widgets = require 'dap.ui.widgets'
         widgets.centered_float(widgets.scopes)
       end)
 
-      require("dap-go").setup({
+      require('dap-go').setup {
         -- Your custom configuration goes here
         dap_configurations = {
           {
-            type = "go",
-            name = "Attach remote",
-            mode = "remote",
-            request = "attach",
+            type = 'go',
+            name = 'Attach remote',
+            mode = 'remote',
+            request = 'attach',
           },
         },
         delve = {
-          path = "dlv",
+          path = 'dlv',
           initialize_timeout_sec = 20,
-          port = "${port}",
+          port = '${port}',
           args = {},
-          build_flags = "",
+          build_flags = '',
           detached = true,
           cwd = nil,
         },
         tests = {
           verbose = false,
         },
-      })
+      }
     end,
     -- Optional: Specify events to load the plugin lazily
     -- event = "BufReadPre",
   },
+  { 'nvim-tree/nvim-web-devicons' },
   -- {
   --   'nvim-tree/nvim-tree.lua',
   --   dependencies = { 'nvim-tree/nvim-web-devicons' },
   --   config = function()
-  --     require('nvim-tree').setup({
+  --     require('nvim-tree').setup {
   --       view = {
   --         side = 'right',
-  --       }
-  --     })
+  --       },
+  --     }
   --     vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { desc = 'Toggle File Explorer' })
   --   end,
   -- },
   {
-    "goolord/alpha-nvim",
-    event = "VimEnter",
+    'goolord/alpha-nvim',
+    event = 'VimEnter',
     config = function()
-      local alpha = require("alpha")
-      local dashboard = require("alpha.themes.dashboard")
+      local alpha = require 'alpha'
+      local dashboard = require 'alpha.themes.dashboard'
 
       -- Set up your custom ASCII art as the header
       dashboard.section.header.val = {
@@ -1070,20 +1093,38 @@ require('lazy').setup({
 
       -- Set up buttons with icons for various shortcuts
       dashboard.section.buttons.val = {
-        dashboard.button("f", "  Find file", ":Telescope find_files<CR>"),
-        dashboard.button("e", "  New file", ":ene <BAR> startinsert<CR>"),
-        dashboard.button("p", "  Find project", ":Telescope projects<CR>"),
-        dashboard.button("r", "  Recently used files", ":Telescope oldfiles<CR>"),
-        dashboard.button("t", "  Find text", ":Telescope live_grep<CR>"),
-        dashboard.button("q", "  Quit Neovim", ":qa<CR>"),
+        dashboard.button('f', '  Find file', ':Telescope find_files<CR>'),
+        dashboard.button('e', '  New file', ':ene <BAR> startinsert<CR>'),
+        dashboard.button('p', '  Find project', ':Telescope projects<CR>'),
+        dashboard.button('r', '  Recently used files', ':Telescope oldfiles<CR>'),
+        dashboard.button('t', '  Find text', ':Telescope live_grep<CR>'),
+        dashboard.button('q', '  Quit Neovim', ':qa<CR>'),
       }
 
       -- Optional footer
-      dashboard.section.footer.val = "Some people can read War and Peace and come away thinking it's a simple adventure story. Others can read the ingredients on a chewing gum wrapper and unlock the secrets of the universe"
+      dashboard.section.footer.val =
+      "Some people can read War and Peace and come away thinking it's a simple adventure story. Others can read the ingredients on a chewing gum wrapper and unlock the secrets of the universe"
 
       -- Apply the dashboard setup
       alpha.setup(dashboard.opts)
     end,
+  },
+  {
+    'romgrk/barbar.nvim',
+    dependencies = {
+      'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
+      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+    },
+    init = function()
+      vim.g.barbar_auto_setup = false
+    end,
+    opts = {
+      -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
+      -- animation = true,
+      -- insert_at_start = true,
+      -- …etc.
+    },
+    version = '^1.0.0', -- optional: only update when a new 1.x version is released
   },
 }, {
   ui = {
@@ -1107,7 +1148,6 @@ require('lazy').setup({
   },
 })
 
-
 -- custom stuff on top of kickstart
 -- remap ; to be :
 vim.keymap.set({ 'n', 'v' }, ';', ':', {})
@@ -1118,18 +1158,17 @@ vim.cmd [[autocmd bufwritepre * lua vim.lsp.buf.format()]]
 -- :qq to replace :q!
 -- vim.keymap.set('c', 'qq', 'q!<CR>', { noremap = true })
 -- vim.api.nvim_create_user_command('qq', 'q!', { })
-vim.cmd('cabbrev qq q!')
-
+vim.cmd 'cabbrev qq q!'
 
 -- Switch around r and Ctl-r
 vim.keymap.set('n', 'r', '<C-r>', { noremap = true, desc = 'Redo' })
 vim.keymap.set('n', '<C-r>', 'r', { noremap = true, desc = 'Replace' })
 
 -- Setup term.lua
-require('custom.term')
+require 'custom.term'
 
 -- Add remaps for windows
-require('keymaps.windows')
+require 'keymaps.windows'
 
 -- Keybindings for oil.nvim
 vim.keymap.set('n', '<leader>o', ':Oil<CR>', { desc = 'Open Oil' })
@@ -1139,6 +1178,9 @@ vim.keymap.set('n', '<leader>w', '<C-w>', { noremap = false, desc = 'Window' })
 
 -- Set the defaul yank register to the system clipboard
 vim.opt.clipboard = 'unnamedplus'
+
+vim.o.background = 'dark' -- or "light" for light mode
+vim.cmd [[colorscheme gruvbox]]
 
 -- the line beneath this is called `modeline`. see `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
