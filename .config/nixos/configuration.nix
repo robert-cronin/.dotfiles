@@ -29,6 +29,34 @@
   # Add tailscale
   services.tailscale.enable = true;
 
+  # Enable expressvpn
+  services.expressvpn = {
+    enable = true;
+  };
+
+  # Ensure the firewall is enabled
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ ];
+    allowedUDPPorts = [ ];
+
+    # extraCommands = ''
+    #   # Allow all traffic over the VPN interface
+    #   iptables -A OUTPUT -o tun0 -j ACCEPT
+    #   iptables -A INPUT -i tun0 -j ACCEPT
+    #
+    #   # Allow traffic on the loopback interface
+    #   iptables -A OUTPUT -o lo -j ACCEPT
+    #   iptables -A INPUT -i lo -j ACCEPT
+    #
+    #   # Drop all other outbound traffic
+    #   iptables -A OUTPUT -j DROP
+    #   iptables -A INPUT -j DROP
+    # '';
+  };
+
+  # Ensure that the expressvpn activation data persists
+  environment.etc."expressvpn".source = "/var/lib/expressvpn";
 
   # Set your time zone.
   time.timeZone = "Australia/Melbourne";

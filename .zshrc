@@ -17,10 +17,13 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
 
 # Mise
-if [[ ! -f $HOME/.local/bin/mise ]]; then
-  curl https://mise.run | sh
+# only use mise if its not nixos
+if [[ ! -f /etc/NIXOS ]]; then
+  if [[ ! -f $HOME/.local/bin/mise ]]; then
+    curl https://mise.run | sh
+  fi
+  eval "$($HOME/.local/bin/mise activate zsh)"
 fi
-eval "$($HOME/.local/bin/mise activate zsh)"
 
 # Setup alacritty theme
 if [[ ! -d ~/.config/alacritty/themes ]]; then
@@ -140,7 +143,7 @@ source $ZSH/oh-my-zsh.sh
 # Conveniences for dotfiles
 export DOT_FLAGS="--git-dir=$HOME/.dotfiles --work-tree=$HOME"
 alias dotfiles="git $DOT_FLAGS"
-alias dots="dot status"
+alias dots="dot status -uno"
 alias dotc="dot commit"
 alias dotl="dot log"
 alias dotau="dot add -u"
@@ -185,9 +188,6 @@ export PATH="$HOME/scripts:$PATH"
 bindkey '^I'   complete-word       # tab          | complete
 bindkey '^[[Z' autosuggest-accept  # shift + tab  | autosuggest
 
-# Set the location of the NixOS configuration file
-export NIX_PATH="nixos-config=$HOME/.config/home-manager/configuration.nix"
-
 # Zoxide init
 eval "$(zoxide init zsh)"
 
@@ -200,3 +200,8 @@ alias ta='tmux attach'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Set up go
+export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOBIN
