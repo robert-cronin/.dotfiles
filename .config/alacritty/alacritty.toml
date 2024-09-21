@@ -9,3 +9,5 @@ size = 13.0
 # italic = { family = "MesloLGS NF", style = "Italic" }
 # bold_italic = { family = "MesloLGS NF", style = "Bold Italic" }
 
+[window]
+startup_mode = "Maximized"

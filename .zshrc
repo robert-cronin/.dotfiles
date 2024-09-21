@@ -171,7 +171,7 @@ alias cdgh='cd $HOME/Documents/github'
 
 # Helpful aliases
 alias ll='ls -alF'
-alias hms='home-manager switch'
+alias hms='home-manager switch -b backup --flake ~/.config/nixpkgs#rob'
 alias cdgo='cd ${GOPATH:-$HOME/go}/src'
 
 # Path modifiers
@@ -205,3 +205,11 @@ alias ta='tmux attach'
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOBIN
+
+# Enable kubectl autocompletion if kubectl is installed
+if command -v kubectl >/dev/null 2>&1; then
+  source <(kubectl completion zsh)
+  alias k='kubectl'
+  compdef k=kubectl
+fi
+

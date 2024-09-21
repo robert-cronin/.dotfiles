@@ -89,10 +89,10 @@ return {
       })
     end,
   },
-  {
-    'github/copilot.vim',
-    branch = 'release'
-  },
+  -- {
+  --   'github/copilot.vim',
+  --   branch = 'release'
+  -- },
   {
     'neoclide/coc.nvim',
     branch = 'release',

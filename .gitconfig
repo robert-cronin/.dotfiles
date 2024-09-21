@@ -18,3 +18,5 @@
 	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
 [difftool]
 	prompt = false
+[status]
+	showuntrackedfiles = no
