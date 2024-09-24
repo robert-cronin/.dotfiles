@@ -173,6 +173,7 @@ alias cdgh='cd $HOME/Documents/github'
 alias ll='ls -alF'
 alias hms='home-manager switch -b backup --flake ~/.config/nixpkgs#rob'
 alias cdgo='cd ${GOPATH:-$HOME/go}/src'
+alias lg='lazygit'
 
 # Path modifiers
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -212,4 +213,5 @@ if command -v kubectl >/dev/null 2>&1; then
   alias k='kubectl'
   compdef k=kubectl
 fi
+
 

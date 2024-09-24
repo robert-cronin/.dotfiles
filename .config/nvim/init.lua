@@ -561,6 +561,9 @@ require('lazy').setup({
           --  For example, in C this would take you to the header.
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
+          -- Hover over symbol
+          map('<leader>hv', vim.lsp.buf.hover, '[H]o[v]er')
+
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
           --    See `:help CursorHold` for information about when this is executed
@@ -1256,6 +1259,9 @@ vim.opt.clipboard = 'unnamedplus'
 
 vim.o.background = 'dark' -- or "light" for light mode
 vim.cmd [[colorscheme gruvbox]]
+
+-- Remap in terminal mode
+vim.api.nvim_set_keymap('t',  '<Leader><ESC>'  ,  '<C-\\><C-n>'  ,  {noremap = true}  )
 
 -- the line beneath this is called `modeline`. see `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

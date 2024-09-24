@@ -20,7 +20,8 @@
         inherit system;
         modules = [
           ./configuration.nix
-          ./virt/virt.nix
+          ./modules/virt.nix
+          # ./modules/kubernetes.nix
         ];
       };
 
@@ -29,6 +30,7 @@
         inherit pkgs;
         modules = [
           ./home.nix
+          ./modules/obsidian.nix
         ];
       };
     };

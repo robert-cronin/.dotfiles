@@ -3,7 +3,6 @@
 {
   imports =
     [
-       # <nixpkgs/nixos/modules/virtualisation/qemu-vm.nix>
       ./hardware-configuration.nix
     ];
 
@@ -112,6 +111,11 @@
     nodejs
 
     docker-compose
+
+    nodePackages."yarn"
+
+    python312
+    python312Packages.pip
   ];
 
   # Docker config

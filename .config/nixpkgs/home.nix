@@ -52,6 +52,9 @@
     bat
     fd
     kubectl
+    wl-clipboard
+    signal-desktop
+    texliveFull
 
     # Override nerdfonts to use only "Meslo"
     (pkgs.nerdfonts.override { fonts = [ "Meslo" ]; })
