@@ -140,5 +140,8 @@
 
   # State Version
   system.stateVersion = "24.05";
+
+  systemd.services."cups-browsed".enable = false;
+  systemd.services."cups-browsed".unitConfig.Mask = true;
 }
 

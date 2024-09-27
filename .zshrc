@@ -174,6 +174,7 @@ alias ll='ls -alF'
 alias hms='home-manager switch -b backup --flake ~/.config/nixpkgs#rob'
 alias cdgo='cd ${GOPATH:-$HOME/go}/src'
 alias lg='lazygit'
+alias tmp='cd $(mktemp -d)'
 
 # Path modifiers
 export PATH="$HOME/.cargo/bin:$PATH"

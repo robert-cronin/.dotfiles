@@ -1041,6 +1041,7 @@ require('lazy').setup({
   --  uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    for additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   { import = 'custom.plugins' },
+  { import = 'obsidian' },
   {
     'mfussenegger/nvim-dap',
   },
