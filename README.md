@@ -1,10 +1,9 @@
 # Robbie's dotfiles!
 
-First things first, set this alias:
+Just run:
+```bash
+chmod +x ./scripts/setup-dotfiles.sh
+./scripts/setup-dotfiles.sh
 ```
-alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-```
-Then just clone it down:
-```
-git clone --bare https://github.com/robert-cronin/.dotfiles $HOME/.dotfiles
-```
+
+
