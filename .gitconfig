@@ -1,22 +1,81 @@
+[user]
+	name = robert-cronin
+	email = robert@robertcronin.com
+
+[core]
+	editor = nvim
+	pager = delta
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+
+[commit]
+	gpgSign = false
+
+[gpg]
+	program = gpg2
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[user]
-	name = robert-cronin
-	email = robert@robertcronin.com
-[core]
-	editor = nvim
-[commit]
-	gpgSign = false
-[gpg]
-	program = gpg2
+
+# Delta (beautiful diffs)
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	side-by-side = true
+	line-numbers = true
+	syntax-theme = Catppuccin Mocha
+
+[delta "catppuccin-mocha"]
+	blame-palette = "#1e1e2e #181825 #11111b #313244 #45475a"
+	commit-decoration-style = box ul
+	dark = true
+	file-decoration-style = "#cdd6f4"
+	file-style = "#cdd6f4"
+	hunk-header-decoration-style = box ul
+	hunk-header-file-style = bold
+	hunk-header-line-number-style = bold "#a6adc8"
+	hunk-header-style = file line-number syntax
+	line-numbers-left-style = "#6c7086"
+	line-numbers-minus-style = bold "#f38ba8"
+	line-numbers-plus-style = bold "#a6e3a1"
+	line-numbers-right-style = "#6c7086"
+	line-numbers-zero-style = "#6c7086"
+	minus-emph-style = bold syntax "#53394c"
+	minus-style = syntax "#35293b"
+	plus-emph-style = bold syntax "#40504b"
+	plus-style = syntax "#2c3d3d"
+	syntax-theme = Catppuccin Mocha
+
+[merge]
+	conflictstyle = diff3
+
 [diff]
+	colorMoved = default
 	tool = nvimdiff
+
 [difftool "nvimdiff"]
 	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
+
 [difftool]
 	prompt = false
-[status]
-	showuntrackedfiles = no
+
+[alias]
+	st = status
+	co = checkout
+	br = branch
+	ci = commit
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	lg = log --oneline --graph --decorate --all

@@ -1,6 +1,0 @@
-[tools]
-node = "lts"
-zoxide = "latest"
-rust = "stable"
-go = "latest"
-ripgrep = "latest"

@@ -1,218 +1,167 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# ~/.zshrc - Minimal, fast Zsh config with Zinit
+# ================================================
+
+# -----------------------------
+# Zinit Installation
+# -----------------------------
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+if [[ ! -d "$ZINIT_HOME" ]]; then
+    mkdir -p "$(dirname $ZINIT_HOME)"
+    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
+source "${ZINIT_HOME}/zinit.zsh"
 
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+# -----------------------------
+# Plugins (lazy-loaded for speed)
+# -----------------------------
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light Aloxaf/fzf-tab
 
-# Path to your Oh My Zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+# -----------------------------
+# Prompt: Starship
+# -----------------------------
+eval "$(starship init zsh)"
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time Oh My Zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
-
-# Mise
-# only use mise if its not nixos
-if [[ ! -f /etc/NIXOS ]]; then
-  if [[ ! -f $HOME/.local/bin/mise ]]; then
-    curl https://mise.run | sh
-  fi
-  eval "$($HOME/.local/bin/mise activate zsh)"
-fi
-
-# Setup alacritty theme
-if [[ ! -d ~/.config/alacritty/themes ]]; then
-  mkdir -p ~/.config/alacritty/themes
-  git clone https://github.com/alacritty/alacritty-theme ~/.config/alacritty/themes
-fi
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
-
-# Auto install missing plugins
-if [[ ! -d $ZSH/custom/plugins/zsh-autosuggestions ]]; then
-  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-fi
-
-if [[ ! -d $ZSH/custom/plugins/zsh-syntax-highlighting ]]; then
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-fi
-
-# powerlevel10k
-if [[ ! -d $ZSH/custom/themes/powerlevel10k ]]; then
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-fi
-source ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k/powerlevel10k.zsh-theme
-
-# oh-my-zsh
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch $(uname -m)"
-
-# Set personal aliases, overriding those provided by Oh My Zsh libs,
-# plugins, and themes. Aliases can be placed here, though Oh My Zsh
-# users are encouraged to define aliases within a top-level file in
-# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
-# - $ZSH_CUSTOM/aliases.zsh
-# - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# Conveniences for dotfiles
-export DOT_FLAGS="--git-dir=$HOME/.dotfiles --work-tree=$HOME"
-alias dotfiles="git $DOT_FLAGS"
-alias dots="dot status -uno"
-alias dotc="dot commit"
-alias dotl="dot log"
-alias dotau="dot add -u"
-alias dotlg="lazygit $DOT_FLAGS"
-alias dotp="dot push"
-alias dotls="dot ls-files"
-
-dot(){
-  if [[ "$#" -eq 0 ]]; then
-    (cd /
-    for i in $(dotfiles ls-files); do
-      echo -n "$(dotfiles -c color.status=always status $i -s | sed "s#$i##")"
-      echo -e "¬/$i¬\e[0;33m$(dotfiles -c color.ui=always log -1 --format="%s" -- $i)\e[0m"
-    done
-    ) | column -t --separator=¬ -T2
-  else
-    dotfiles $*
-  fi
-}
-
-fpath+=${ZDOTDIR:-~}/.zsh_functions
-
-# Git
-alias cdgh='cd $HOME/Documents/github'
-
-# Helpful aliases
-alias ll='ls -alF'
-alias hms='home-manager switch -b backup --flake ~/.config/nixpkgs#rob'
-alias cdgo='cd ${GOPATH:-$HOME/go}/src'
-alias lg='lazygit'
-alias tmp='cd $(mktemp -d)'
-
-# Path modifiers
-export PATH="$HOME/.cargo/bin:$PATH"
-
-# Nodejs
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-# Source scripts directory
-export PATH="$HOME/scripts:$PATH"
-
-# Set tab as the completion key
-bindkey '^I'   complete-word       # tab          | complete
-bindkey '^[[Z' autosuggest-accept  # shift + tab  | autosuggest
-
-# Zoxide init
+# -----------------------------
+# Tool Integrations
+# -----------------------------
+# Zoxide (smart cd)
 eval "$(zoxide init zsh)"
 
-# Set the default editor
-export EDITOR=nvim
+# FZF
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPTS=" \
+--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+--color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
+--color=selected-bg:#45475a \
+--multi"
 
-# Helpful aliases for tmux
+# -----------------------------
+# Aliases: Modern CLI Tools
+# -----------------------------
+# File listing (eza)
+alias ls='eza --icons --group-directories-first'
+alias ll='eza -l --icons --group-directories-first'
+alias la='eza -la --icons --group-directories-first'
+alias lt='eza --tree --icons --level=2'
+alias tree='eza --tree --icons'
+
+# File viewing (bat)
+alias cat='bat --paging=never'
+alias less='bat'
+
+# Navigation (zoxide)
+alias cd='z'
+
+# Search (ripgrep, fd)
+alias grep='rg'
+alias find='fd'
+
+# Git
+alias g='git'
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git pull'
+alias gd='git diff'
+alias gco='git checkout'
+alias gb='git branch'
+alias glog='git log --oneline --graph --decorate'
+alias lg='lazygit'
+
+# Dotfiles management (bare repo)
+alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+alias dots='dot status'
+alias dota='dot add'
+alias dotc='dot commit'
+alias dotp='dot push'
+alias dotl='dot pull'
+alias dotlg='lazygit --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+
+# Quick edits
+alias zshrc='${EDITOR:-nvim} ~/.zshrc'
+alias reload='source ~/.zshrc'
+
+# System
+alias c='clear'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+# Tmux
 alias t='tmux'
 alias ta='tmux attach'
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# Directories
+alias cdgh='cd $HOME/Documents/github'
+alias tmp='cd $(mktemp -d)'
 
-# Set up go
+# -----------------------------
+# History
+# -----------------------------
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+
+# -----------------------------
+# Completion
+# -----------------------------
+autoload -Uz compinit
+compinit -C
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+zstyle ':fzf-tab:complete:z:*' fzf-preview 'eza -1 --color=always $realpath'
+
+# -----------------------------
+# Key Bindings
+# -----------------------------
+bindkey -e  # Emacs mode
+bindkey '^[[A' history-search-backward
+bindkey '^[[B' history-search-forward
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
+bindkey '^[[3~' delete-char
+bindkey '^[[Z' autosuggest-accept  # shift + tab | autosuggest
+
+# -----------------------------
+# Environment
+# -----------------------------
+export EDITOR='nvim'
+export VISUAL='nvim'
+export PAGER='less'
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+# PATH additions
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
+export PATH="$HOME/scripts:$PATH"
+
+# Go
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOBIN
 
-# Enable kubectl autocompletion if kubectl is installed
+# -----------------------------
+# Tool-specific completions
+# -----------------------------
+# kubectl (if installed)
 if command -v kubectl >/dev/null 2>&1; then
-  source <(kubectl completion zsh)
-  alias k='kubectl'
-  compdef k=kubectl
+    source <(kubectl completion zsh)
+    alias k='kubectl'
 fi
 
-
+# -----------------------------
+# Local Overrides
+# -----------------------------
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
