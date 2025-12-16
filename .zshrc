@@ -2,6 +2,11 @@
 # ================================================
 
 # -----------------------------
+# Homebrew
+# -----------------------------
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# -----------------------------
 # Zinit Installation
 # -----------------------------
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
@@ -151,6 +156,11 @@ export PATH="$HOME/scripts:$PATH"
 # Go
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # -----------------------------
 # Tool-specific completions
